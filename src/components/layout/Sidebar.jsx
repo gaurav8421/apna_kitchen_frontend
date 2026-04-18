@@ -58,7 +58,7 @@ export default function Sidebar() {
 
       <div className="px-3 py-4 border-t border-gray-800">
         <button
-          onClick={() => logout(undefined, { onSuccess: () => navigate('/login') })}
+          onClick={() => logout(undefined, { onSettled: () => navigate('/login') })}
           className="flex items-center gap-3 px-3 py-2.5 w-full text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm transition"
         >
           <LogOut size={17} />
