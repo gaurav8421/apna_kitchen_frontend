@@ -28,7 +28,7 @@ export function useLogout() {
       const refresh = useAuthStore.getState().refreshToken
       return client.post('/auth/logout/', { refresh })
     },
-    onSettled: () => {
+    onSuccess: () => {
       useAuthStore.getState().clearAuth()
     },
   })

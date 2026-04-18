@@ -28,6 +28,7 @@ client.interceptors.response.use(
           refresh: refreshToken,
         })
         useAuthStore.getState().updateAccessToken(data.access)
+        original.headers = original.headers ?? {}
         original.headers.Authorization = `Bearer ${data.access}`
         return client(original)
       } catch {
