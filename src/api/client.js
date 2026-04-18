@@ -24,10 +24,12 @@ client.interceptors.response.use(
         return Promise.reject(error)
       }
       try {
-        const { data } = await axios.post('/api/v1/auth/token/refresh/', {
+        const baseURL = client.defaults.baseURL ?? '/api/v1'
+        const { data } = await axios.post(`${baseURL}/auth/token/refresh/`, {
           refresh: refreshToken,
         })
         useAuthStore.getState().updateAccessToken(data.access)
+        if (data.refresh) useAuthStore.getState().updateRefreshToken(data.refresh)
         original.headers = original.headers ?? {}
         original.headers.Authorization = `Bearer ${data.access}`
         return client(original)

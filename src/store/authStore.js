@@ -16,6 +16,8 @@ const useAuthStore = create(
 
       updateAccessToken: (accessToken) => set({ accessToken }),
 
+      updateRefreshToken: (refreshToken) => set({ refreshToken }),
+
       isAuthenticated: () => Boolean(get().accessToken),
     }),
     {
