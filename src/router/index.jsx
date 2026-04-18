@@ -6,12 +6,12 @@ import AppLayout from '../components/layout/AppLayout'
 import Dashboard from '../pages/dashboard/Dashboard'
 
 function RequireAuth() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated())
+  const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken))
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />
 }
 
 function GuestOnly() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated())
+  const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken))
   return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Outlet />
 }
 
