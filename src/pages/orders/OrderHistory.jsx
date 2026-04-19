@@ -5,7 +5,7 @@ const STATUS_COLORS = {
   pending: 'bg-yellow-100 text-yellow-700',
   preparing: 'bg-blue-100 text-blue-700',
   ready: 'bg-green-100 text-green-700',
-  completed: 'bg-gray-100 text-gray-600',
+  completed: 'bg-gray-100 text-gray-700',
   cancelled: 'bg-red-100 text-red-600',
 }
 
@@ -63,14 +63,22 @@ export default function OrderHistory() {
                   <td className="px-4 py-3 text-gray-600">{ORDER_TYPE_LABELS[order.order_type] ?? order.order_type}</td>
                   <td className="px-4 py-3 text-gray-500">{order.table_number || '—'}</td>
                   <td className="px-4 py-3 text-gray-500">{order.items?.length ?? 0}</td>
-                  <td className="px-4 py-3 text-right font-medium text-gray-900">₹{order.total}</td>
+                  <td className="px-4 py-3 text-right font-medium text-gray-900">
+                    ₹{order.total != null ? Number(order.total).toFixed(2) : '—'}
+                  </td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[order.status] ?? 'bg-gray-100 text-gray-600'}`}>
-                      {order.status}
+                    <span
+                      role="status"
+                      aria-label={`Status: ${order.status}`}
+                      className={`px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[order.status] ?? 'bg-gray-100 text-gray-700'}`}
+                    >
+                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-gray-400 text-xs">
-                    {new Date(order.created_at).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
+                    {order.created_at
+                      ? new Date(order.created_at).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })
+                      : '—'}
                   </td>
                 </tr>
               ))}
