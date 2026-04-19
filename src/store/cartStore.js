@@ -43,7 +43,16 @@ const useCartStore = create((set, get) => ({
     }))
   },
 
-  setOrderMeta: (meta) => set(meta),
+  setOrderMeta: ({ branchId, orderType, tableNumber, customerName, customerPhone, discount } = {}) => {
+    const patch = {}
+    if (branchId      !== undefined) patch.branchId      = branchId
+    if (orderType     !== undefined) patch.orderType     = orderType
+    if (tableNumber   !== undefined) patch.tableNumber   = tableNumber
+    if (customerName  !== undefined) patch.customerName  = customerName
+    if (customerPhone !== undefined) patch.customerPhone = customerPhone
+    if (discount      !== undefined) patch.discount      = discount
+    set(patch)
+  },
 
   clearCart: () =>
     set({
@@ -63,7 +72,8 @@ const useCartStore = create((set, get) => ({
 
   total: (taxRatePercent) => {
     const sub = get().subtotal()
-    return parseFloat((sub + get().tax(taxRatePercent) - get().discount).toFixed(2))
+    const tax = (sub * taxRatePercent) / 100
+    return parseFloat((sub + tax - get().discount).toFixed(2))
   },
 }))
 

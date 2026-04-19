@@ -73,3 +73,39 @@ describe('clearCart', () => {
     expect(useCartStore.getState().items).toHaveLength(0)
   })
 })
+
+describe('setOrderMeta', () => {
+  it('sets allowed fields', () => {
+    act(() => useCartStore.getState().setOrderMeta({ orderType: 'takeaway', tableNumber: '7' }))
+    const state = useCartStore.getState()
+    expect(state.orderType).toBe('takeaway')
+    expect(state.tableNumber).toBe('7')
+  })
+
+  it('does not overwrite store actions', () => {
+    act(() => useCartStore.getState().setOrderMeta({ addItem: 'corrupted' }))
+    expect(typeof useCartStore.getState().addItem).toBe('function')
+  })
+})
+
+describe('clearCart preserves session fields', () => {
+  it('preserves branchId and orderType after clearCart', () => {
+    act(() => useCartStore.getState().setOrderMeta({ branchId: 'branch-1', orderType: 'takeaway' }))
+    act(() => useCartStore.getState().addItem(fakeItem))
+    act(() => useCartStore.getState().clearCart())
+    const state = useCartStore.getState()
+    expect(state.items).toHaveLength(0)
+    expect(state.branchId).toBe('branch-1')
+    expect(state.orderType).toBe('takeaway')
+  })
+})
+
+describe('addItem with modifiers', () => {
+  it('includes modifier prices in unitPrice', () => {
+    const itemWithModifiers = { id: 'pizza-1', name: 'Pizza', price: 300, item_type: 'veg' }
+    const modifiers = [{ name: 'Extra Cheese', price: 30 }, { name: 'Jalapenos', price: 20 }]
+    act(() => useCartStore.getState().addItem(itemWithModifiers, '', modifiers))
+    const item = useCartStore.getState().items[0]
+    expect(item.unitPrice).toBe(350)
+  })
+})
