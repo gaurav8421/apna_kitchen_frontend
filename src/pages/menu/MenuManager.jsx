@@ -36,7 +36,7 @@ export default function MenuManager() {
   }
 
   const handleSaveItem = () => {
-    const payload = { ...itemForm, category: activeCatId, price: parseFloat(itemForm.price).toFixed(2) }
+    const payload = { ...itemForm, category: activeCatId, price: parseFloat(itemForm.price || 0).toFixed(2) }
     if (editingItem) {
       updateItem.mutate({ id: editingItem.id, ...payload }, { onSuccess: () => { setShowItemForm(false); setEditingItem(null); setItemForm({ name: '', price: '', item_type: 'veg', description: '' }) } })
     } else {
@@ -67,7 +67,7 @@ export default function MenuManager() {
               <span className="flex-1 text-sm truncate">{cat.name}</span>
               <div className="hidden group-hover:flex gap-1">
                 <button onClick={(e) => { e.stopPropagation(); setEditingCat(cat); setCatName(cat.name); setShowCatForm(true) }} className="text-gray-400 hover:text-gray-600"><Pencil size={12} /></button>
-                <button onClick={(e) => { e.stopPropagation(); if (confirm(`Delete "${cat.name}"?`)) deleteCat.mutate(cat.id) }} className="text-gray-400 hover:text-red-500"><Trash2 size={12} /></button>
+                <button onClick={(e) => { e.stopPropagation(); if (confirm(`Delete "${cat.name}"?`)) deleteCat.mutate(cat.id, { onSuccess: () => { if (activeCatId === cat.id) setActiveCatId(null) } }) }} className="text-gray-400 hover:text-red-500"><Trash2 size={12} /></button>
               </div>
             </div>
           ))}
@@ -142,7 +142,7 @@ export default function MenuManager() {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
             <div className="flex gap-2">
-              <button onClick={() => setShowCatForm(false)} className="flex-1 py-2 border border-gray-200 rounded-lg text-sm text-gray-600">Cancel</button>
+              <button onClick={() => { setShowCatForm(false); setEditingCat(null); setCatName('') }} className="flex-1 py-2 border border-gray-200 rounded-lg text-sm text-gray-600">Cancel</button>
               <button onClick={handleSaveCat} disabled={!catName.trim()} className="flex-1 py-2 bg-brand-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">Save</button>
             </div>
           </div>
@@ -173,8 +173,8 @@ export default function MenuManager() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-500" rows={2} />
             </div>
             <div className="flex gap-2">
-              <button onClick={() => setShowItemForm(false)} className="flex-1 py-2 border border-gray-200 rounded-lg text-sm text-gray-600">Cancel</button>
-              <button onClick={handleSaveItem} disabled={!itemForm.name.trim() || !itemForm.price}
+              <button onClick={() => { setShowItemForm(false); setEditingItem(null); setItemForm({ name: '', price: '', item_type: 'veg', description: '' }) }} className="flex-1 py-2 border border-gray-200 rounded-lg text-sm text-gray-600">Cancel</button>
+              <button onClick={handleSaveItem} disabled={!itemForm.name.trim() || itemForm.price === ''}
                 className="flex-1 py-2 bg-brand-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">Save</button>
             </div>
           </div>
