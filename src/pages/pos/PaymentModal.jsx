@@ -14,7 +14,6 @@ export default function PaymentModal({ onClose, taxRate = 5 }) {
   const [method, setMethod] = useState('cash')
   const [referenceId, setReferenceId] = useState('')
   const cartItems = useCartStore((s) => s.items)
-  const branchId = useCartStore((s) => s.branchId)
   const orderType = useCartStore((s) => s.orderType)
   const tableNumber = useCartStore((s) => s.tableNumber)
   const customerName = useCartStore((s) => s.customerName)
@@ -29,41 +28,45 @@ export default function PaymentModal({ onClose, taxRate = 5 }) {
   const recordPayment = useRecordPayment()
 
   const handlePlaceOrder = async () => {
-    const sub = subtotal()
-    const t = tax(taxRate)
-    const tot = total(taxRate)
-    const branch = branchId || activeBranchId
+    try {
+      const sub = subtotal()
+      const t = tax(taxRate)
+      const tot = total(taxRate)
+      const branch = activeBranchId
 
-    const orderPayload = {
-      branch,
-      order_type: orderType,
-      table_number: tableNumber,
-      customer_name: customerName,
-      customer_phone: customerPhone,
-      subtotal: sub.toFixed(2),
-      tax: t.toFixed(2),
-      total: tot.toFixed(2),
-      items: cartItems.map((i) => ({
-        item: i.id,
-        item_name: i.name,
-        variant_name: i.variantName,
-        unit_price: i.unitPrice.toFixed(2),
-        quantity: i.quantity,
-        modifiers: i.modifiers,
-        subtotal: (i.unitPrice * i.quantity).toFixed(2),
-      })),
+      const orderPayload = {
+        branch,
+        order_type: orderType,
+        table_number: tableNumber,
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        subtotal: sub.toFixed(2),
+        tax: t.toFixed(2),
+        total: tot.toFixed(2),
+        items: cartItems.map((i) => ({
+          item: i.id,
+          item_name: i.name,
+          variant_name: i.variantName,
+          unit_price: i.unitPrice.toFixed(2),
+          quantity: i.quantity,
+          modifiers: i.modifiers,
+          subtotal: (i.unitPrice * i.quantity).toFixed(2),
+        })),
+      }
+
+      const order = await createOrder.mutateAsync(orderPayload)
+      await recordPayment.mutateAsync({
+        order: order.id,
+        amount: tot.toFixed(2),
+        method,
+        reference_id: referenceId,
+      })
+
+      clearCart()
+      onClose()
+    } catch {
+      // errors surfaced via isError state
     }
-
-    const order = await createOrder.mutateAsync(orderPayload)
-    await recordPayment.mutateAsync({
-      order: order.id,
-      amount: tot.toFixed(2),
-      method,
-      reference_id: referenceId,
-    })
-
-    clearCart()
-    onClose()
   }
 
   const isPending = createOrder.isPending || recordPayment.isPending
@@ -76,7 +79,7 @@ export default function PaymentModal({ onClose, taxRate = 5 }) {
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-semibold">Payment</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} disabled={isPending} className="text-gray-400 hover:text-gray-600 disabled:opacity-30">
             <X size={20} />
           </button>
         </div>

@@ -34,7 +34,8 @@ export default function CartItem({ item }) {
       </p>
       <button
         onClick={() => removeItem(item.key)}
-        className="text-gray-300 hover:text-red-400 transition"
+        aria-label={`Remove ${item.name}`}
+        className="text-gray-400 hover:text-red-400 transition"
       >
         <Trash2 size={14} />
       </button>
