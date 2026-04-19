@@ -4,6 +4,7 @@ import Login from '../pages/auth/Login'
 import Register from '../pages/auth/Register'
 import AppLayout from '../components/layout/AppLayout'
 import Dashboard from '../pages/dashboard/Dashboard'
+import POSScreen from '../pages/pos/POSScreen'
 
 function RequireAuth() {
   const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken))
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
         element: <AppLayout />,
         children: [
           { path: '/dashboard', element: <Dashboard /> },
+          { path: '/pos', element: <POSScreen /> },
           { path: '/', element: <Navigate to="/dashboard" replace /> },
         ],
       },
