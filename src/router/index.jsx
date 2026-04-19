@@ -6,6 +6,7 @@ import AppLayout from '../components/layout/AppLayout'
 import Dashboard from '../pages/dashboard/Dashboard'
 import POSScreen from '../pages/pos/POSScreen'
 import OrderHistory from '../pages/orders/OrderHistory'
+import MenuManager from '../pages/menu/MenuManager'
 
 function RequireAuth() {
   const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken))
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
           { path: '/dashboard', element: <Dashboard /> },
           { path: '/pos', element: <POSScreen /> },
           { path: '/orders', element: <OrderHistory /> },
+          { path: '/menu', element: <MenuManager /> },
           { path: '/', element: <Navigate to="/dashboard" replace /> },
         ],
       },
