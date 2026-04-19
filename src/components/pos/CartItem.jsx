@@ -30,12 +30,12 @@ export default function CartItem({ item }) {
         </button>
       </div>
       <p className="w-16 text-right text-sm font-medium text-gray-900">
-        ₹{(item.unitPrice * item.quantity).toFixed(0)}
+        ₹{(item.unitPrice * item.quantity).toFixed(2)}
       </p>
       <button
         onClick={() => removeItem(item.key)}
         aria-label={`Remove ${item.name}`}
-        className="text-gray-400 hover:text-red-400 transition"
+        className="text-gray-500 hover:text-red-400 transition"
       >
         <Trash2 size={14} />
       </button>
