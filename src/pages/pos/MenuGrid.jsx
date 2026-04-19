@@ -12,6 +12,7 @@ export default function MenuGrid() {
 
   const { data: categories = [] } = useCategories(branchId ? { branch: branchId } : {})
   const { data: items = [], isLoading } = useMenuItems({
+    ...(branchId ? { branch: branchId } : {}),
     ...(activeCatId ? { category: activeCatId } : {}),
     is_available: true,
   })
@@ -27,12 +28,15 @@ export default function MenuGrid() {
           type="text"
           placeholder="Search items..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value)
+            if (e.target.value.trim()) setActiveCatId(null)
+          }}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
         />
       </div>
 
-      <div className="flex gap-2 px-3 py-2 overflow-x-auto bg-white border-b border-gray-200 scrollbar-hide">
+      <div className="flex gap-2 px-3 py-2 overflow-x-auto bg-white border-b border-gray-200 [&::-webkit-scrollbar]:hidden">
         <button
           onClick={() => setActiveCatId(null)}
           className={`flex-none px-3 py-1.5 rounded-full text-xs font-medium transition ${
@@ -60,7 +64,7 @@ export default function MenuGrid() {
         ) : filtered.length === 0 ? (
           <p className="text-sm text-gray-400 text-center mt-8">No items found</p>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2">
             {filtered.map((item) => (
               <ItemCard key={item.id} item={item} onAdd={addItem} />
             ))}
