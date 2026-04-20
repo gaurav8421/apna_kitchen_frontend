@@ -35,6 +35,8 @@ export function useKitchenSocket() {
   useEffect(() => {
     if (!branchId || !token) return
 
+    let cancelled = false
+
     fetchActive()
 
     function openSocket() {
@@ -43,6 +45,7 @@ export function useKitchenSocket() {
       wsRef.current = ws
 
       ws.addEventListener('open', () => {
+        if (cancelled) return
         setConnected(true)
         setConnecting(false)
         retryDelayRef.current = 1000
@@ -50,9 +53,13 @@ export function useKitchenSocket() {
       })
 
       ws.addEventListener('message', (event) => {
-        const msg = JSON.parse(event.data)
+        if (cancelled) return
+        let msg
+        try { msg = JSON.parse(event.data) } catch { return }
         if (msg.type === 'new_order') {
-          setOrders((prev) => [msg.order, ...prev])
+          setOrders((prev) =>
+            prev.some((o) => o.id === msg.order.id) ? prev : [msg.order, ...prev]
+          )
         } else if (msg.type === 'order_updated') {
           setOrders((prev) =>
             prev.map((o) => (o.id === msg.order.id ? msg.order : o))
@@ -61,8 +68,10 @@ export function useKitchenSocket() {
       })
 
       ws.addEventListener('close', () => {
+        if (cancelled) return
         setConnected(false)
         setConnecting(true)
+        clearInterval(pollTimerRef.current)
         pollTimerRef.current = setInterval(fetchActive, 30_000)
         retryTimerRef.current = setTimeout(() => {
           retryDelayRef.current = Math.min(retryDelayRef.current * 2, 30_000)
@@ -76,6 +85,8 @@ export function useKitchenSocket() {
     openSocket()
 
     return () => {
+      cancelled = true
+      retryDelayRef.current = 1000
       wsRef.current?.close()
       clearTimeout(retryTimerRef.current)
       clearInterval(pollTimerRef.current)
