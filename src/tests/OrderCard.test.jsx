@@ -1,15 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import OrderCard from '../components/kitchen/OrderCard'
+import { useUpdateOrderStatus } from '../api/orders'
 
 const mockUpdateStatus = vi.fn()
 
 vi.mock('../api/orders', () => ({
-  useUpdateOrderStatus: () => ({
-    mutate: mockUpdateStatus,
-    isPending: false,
-  }),
+  useUpdateOrderStatus: vi.fn(),
 }))
 
 function wrap(ui) {
@@ -32,7 +30,13 @@ const baseOrder = {
 }
 
 describe('OrderCard', () => {
-  beforeEach(() => mockUpdateStatus.mockClear())
+  beforeEach(() => {
+    mockUpdateStatus.mockClear()
+    vi.mocked(useUpdateOrderStatus).mockReturnValue({
+      mutate: mockUpdateStatus,
+      isPending: false,
+    })
+  })
 
   it('renders order number', () => {
     wrap(<OrderCard order={baseOrder} onStatusUpdate={vi.fn()} />)
@@ -83,6 +87,38 @@ describe('OrderCard', () => {
 
   it('shows strikethrough items for cancelled order', () => {
     wrap(<OrderCard order={{ ...baseOrder, status: 'cancelled' }} onStatusUpdate={vi.fn()} />)
-    expect(screen.getByText(/Cancelled/i)).toBeInTheDocument()
+    const items = screen.getAllByText(/×/)
+    items.forEach((el) => expect(el.className).toMatch(/line-through/))
+  })
+
+  it('calls onStatusUpdate with new status after mutation succeeds', () => {
+    const onStatusUpdate = vi.fn()
+    wrap(<OrderCard order={baseOrder} onStatusUpdate={onStatusUpdate} />)
+    fireEvent.click(screen.getByRole('button', { name: /start preparing/i }))
+    // Simulate the onSuccess callback being invoked by the mutation
+    const onSuccessArg = mockUpdateStatus.mock.calls[0][1].onSuccess
+    onSuccessArg()
+    expect(onStatusUpdate).toHaveBeenCalledWith('ord-1', 'preparing')
+  })
+
+  it('disables button and shows Updating… while isPending', () => {
+    vi.mocked(useUpdateOrderStatus).mockReturnValueOnce({
+      mutate: mockUpdateStatus,
+      isPending: true,
+    })
+    wrap(<OrderCard order={baseOrder} onStatusUpdate={vi.fn()} />)
+    const btn = screen.getByRole('button', { name: /updating/i })
+    expect(btn).toBeDisabled()
+  })
+
+  it('auto-hides cancelled order after 10 seconds', () => {
+    vi.useFakeTimers()
+    const { container } = wrap(
+      <OrderCard order={{ ...baseOrder, status: 'cancelled' }} onStatusUpdate={vi.fn()} />
+    )
+    expect(container.firstChild).not.toBeNull()
+    act(() => vi.advanceTimersByTime(10_000))
+    expect(container.firstChild).toBeNull()
+    vi.useRealTimers()
   })
 })
