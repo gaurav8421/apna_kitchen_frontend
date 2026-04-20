@@ -12,7 +12,6 @@ export default function MenuGrid() {
 
   const { data: categories = [] } = useCategories(branchId ? { branch: branchId } : {})
   const { data: items = [], isLoading } = useMenuItems({
-    ...(branchId ? { branch: branchId } : {}),
     ...(activeCatId ? { category: activeCatId } : {}),
     is_available: true,
   })

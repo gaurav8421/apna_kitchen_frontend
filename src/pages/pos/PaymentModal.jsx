@@ -18,6 +18,7 @@ export default function PaymentModal({ onClose, taxRate = 5 }) {
   const tableNumber = useCartStore((s) => s.tableNumber)
   const customerName = useCartStore((s) => s.customerName)
   const customerPhone = useCartStore((s) => s.customerPhone)
+  const discount = useCartStore((s) => s.discount)
   const subtotal = useCartStore((s) => s.subtotal)
   const tax = useCartStore((s) => s.tax)
   const total = useCartStore((s) => s.total)
@@ -41,6 +42,7 @@ export default function PaymentModal({ onClose, taxRate = 5 }) {
         customer_name: customerName,
         customer_phone: customerPhone,
         subtotal: sub.toFixed(2),
+        discount: Number(discount).toFixed(2),
         tax: t.toFixed(2),
         total: tot.toFixed(2),
         items: cartItems.map((i) => ({

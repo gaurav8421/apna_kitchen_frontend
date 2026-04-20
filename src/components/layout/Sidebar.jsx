@@ -11,9 +11,9 @@ const navItems = [
   { to: '/pos', icon: ShoppingCart, label: 'POS' },
   { to: '/orders', icon: Receipt, label: 'Orders' },
   { to: '/menu', icon: UtensilsCrossed, label: 'Menu' },
-  { to: '/inventory', icon: Package, label: 'Inventory' },
-  { to: '/reports', icon: BarChart2, label: 'Reports' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
+  { to: '/inventory', icon: Package, label: 'Inventory', comingSoon: true },
+  { to: '/reports', icon: BarChart2, label: 'Reports', comingSoon: true },
+  { to: '/settings', icon: Settings, label: 'Settings', comingSoon: true },
 ]
 
 const roleNav = {
@@ -39,7 +39,17 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {items.map(({ to, icon: Icon, label }) => (
+        {items.map(({ to, icon: Icon, label, comingSoon }) =>
+          comingSoon ? (
+            <div
+              key={to}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 cursor-not-allowed"
+              title="Coming soon"
+            >
+              <Icon size={17} />
+              {label}
+            </div>
+          ) : (
           <NavLink
             key={to}
             to={to}
@@ -53,7 +63,8 @@ export default function Sidebar() {
             <Icon size={17} />
             {label}
           </NavLink>
-        ))}
+          )
+        )}
       </nav>
 
       <div className="px-3 py-4 border-t border-gray-800">
