@@ -95,7 +95,7 @@ export default function InventoryItemModal({ item, onSubmit, onClose, isSubmitti
               disabled={isSubmitting}
               className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 disabled:opacity-50"
             >
-              {isSubmitting ? 'Saving…' : item ? 'Save Changes' : 'Add Item'}
+              {isSubmitting ? 'Saving…' : item ? 'Save Changes' : 'Save'}
             </button>
           </div>
         </form>
