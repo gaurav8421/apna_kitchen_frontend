@@ -22,7 +22,7 @@ export default function Dashboard() {
     <div className="p-6 max-w-5xl mx-auto">
       {isError && (
         <div className="mb-4 flex items-center gap-2 text-sm text-red-600">
-          <span>Could not load summary</span>
+          <span>Could not load summary ·</span>
           <button
             onClick={() => refetch()}
             className="underline hover:no-underline font-medium"
