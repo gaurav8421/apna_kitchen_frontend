@@ -25,9 +25,9 @@ export default function InventoryItemModal({ item, onSubmit, onClose, isSubmitti
     if (!form.name.trim()) e.name = 'Name is required'
     if (!form.unit.trim()) e.unit = 'Unit is required'
     const thresh = Number(form.low_stock_threshold)
-    if (isNaN(thresh) || thresh < 0) e.low_stock_threshold = 'Must be ≥ 0'
+    if (form.low_stock_threshold === '' || isNaN(thresh) || thresh < 0) e.low_stock_threshold = 'Must be ≥ 0'
     const cost = Number(form.cost_per_unit)
-    if (isNaN(cost) || cost < 0) e.cost_per_unit = 'Must be ≥ 0'
+    if (form.cost_per_unit === '' || isNaN(cost) || cost < 0) e.cost_per_unit = 'Must be ≥ 0'
     return e
   }
 

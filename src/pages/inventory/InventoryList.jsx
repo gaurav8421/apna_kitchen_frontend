@@ -68,7 +68,7 @@ export default function InventoryList() {
       )}
       {isError && (
         <div className="mb-4 flex items-center gap-2 text-sm text-red-600">
-          <span>Could not load inventory</span>
+          <span>Could not load inventory ·</span>
           <button onClick={() => refetch()} className="underline hover:no-underline font-medium">
             Retry
           </button>
