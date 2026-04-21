@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, ShoppingCart, UtensilsCrossed,
-  Package, Receipt, BarChart2, Settings, LogOut
+  Package, Receipt, BarChart2, Settings, LogOut, ChefHat
 } from 'lucide-react'
 import useAuthStore from '../../store/authStore'
 import { useLogout } from '../../api/auth'
@@ -9,6 +9,7 @@ import { useLogout } from '../../api/auth'
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/pos', icon: ShoppingCart, label: 'POS' },
+  { to: '/kitchen', icon: ChefHat, label: 'Kitchen' },
   { to: '/orders', icon: Receipt, label: 'Orders' },
   { to: '/menu', icon: UtensilsCrossed, label: 'Menu' },
   { to: '/inventory', icon: Package, label: 'Inventory', comingSoon: true },
@@ -17,7 +18,7 @@ const navItems = [
 ]
 
 const roleNav = {
-  kitchen: ['/pos'],
+  kitchen: ['/kitchen', '/pos'],
   cashier: ['/pos', '/orders', '/dashboard'],
 }
 

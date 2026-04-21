@@ -7,6 +7,7 @@ import Dashboard from '../pages/dashboard/Dashboard'
 import POSScreen from '../pages/pos/POSScreen'
 import OrderHistory from '../pages/orders/OrderHistory'
 import MenuManager from '../pages/menu/MenuManager'
+import KitchenDisplay from '../pages/kitchen/KitchenDisplay'
 
 function RequireAuth() {
   const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken))
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
   {
     element: <RequireAuth />,
     children: [
+      { path: '/kitchen', element: <KitchenDisplay /> },
       {
         element: <AppLayout />,
         children: [
