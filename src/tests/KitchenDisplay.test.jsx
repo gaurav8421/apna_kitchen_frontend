@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
@@ -32,16 +32,17 @@ function wrap(ui) {
   )
 }
 
-const defaultSocket = {
-  orders: [],
-  connected: true,
-  connecting: false,
-  noBranch: false,
-  updateOrderLocally: vi.fn(),
-}
+let defaultSocket
 
 describe('KitchenDisplay', () => {
   beforeEach(() => {
+    defaultSocket = {
+      orders: [],
+      connected: true,
+      connecting: false,
+      noBranch: false,
+      updateOrderLocally: vi.fn(),
+    }
     vi.mocked(useKitchenSocket).mockReturnValue(defaultSocket)
   })
 

@@ -56,7 +56,7 @@ export default function KitchenDisplay() {
                     onStatusUpdate={updateOrderLocally}
                   />
                 ))}
-                {count === 0 && (
+                {col.length === 0 && (
                   <p className="text-center text-gray-600 text-sm mt-8">No orders</p>
                 )}
               </div>
