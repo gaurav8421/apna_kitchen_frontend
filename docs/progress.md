@@ -79,6 +79,35 @@
 
 ---
 
+## Phase 4: Operations ✅ COMPLETE
+
+**Frontend** — 84 tests passing, build clean
+
+| File | What's built |
+|------|-------------|
+| `src/api/reports.js` | `useDailySummary(date)` — React Query hook; staleTime + refetchInterval 60s |
+| `src/pages/dashboard/Dashboard.jsx` | KPI cards wired to live `/reports/daily-summary/` API; pulse skeleton loading; error banner + Retry; jsdom-safe money formatting |
+| `src/api/inventory.js` | `useInventoryItems`, `useCreateInventoryItem`, `useUpdateInventoryItem`, `useDeleteInventoryItem`, `useAddStockTransaction` |
+| `src/components/inventory/InventoryItemModal.jsx` | Add/Edit item modal (name, unit, low_stock_threshold, cost_per_unit); empty-string validation guards |
+| `src/components/inventory/StockAdjustModal.jsx` | Stock transaction modal (add/deduct/adjust); deduct-over-stock warning |
+| `src/pages/inventory/InventoryList.jsx` | Full inventory page; red left border + red stock value on low stock (`current_stock ≤ low_stock_threshold`); Adjust/Edit/Delete row actions; toast on mutation errors |
+| `src/api/expenses.js` | `useExpenses` (with category/from/to filter params), `useCreateExpense`, `useUpdateExpense`, `useDeleteExpense`, `useExpenseCategories`, `useCreateExpenseCategory` |
+| `src/components/expenses/ExpenseFormModal.jsx` | Add/Edit expense modal; inline "＋ New category" creation via `__new__` sentinel; date defaults to today |
+| `src/pages/expenses/ExpenseList.jsx` | Full expense page; category + date range filter bar; client-side total (all shown expenses); toast on mutation errors |
+
+**Routes added:** `/inventory`, `/expenses`
+
+**Sidebar changes:** Inventory `comingSoon` removed (live link); `Wallet` icon + Expenses added between Inventory and Reports
+
+**Known limitations / deferred to later phase:**
+- Inventory auto-deduction on order (requires backend signal — Phase 5)
+- Inventory history / audit trail
+- Vendor CRUD with phone/email/gstin (Phase 5)
+- CSV export (Phase 5 — Reports)
+- Recurring expenses
+
+---
+
 ## Key Architecture Decisions (don't change without reason)
 
 - **org-scoping** — every queryset filters by `request.user.organization`; returns `.none()` when user has no org
