@@ -12,7 +12,7 @@ const navItems = [
   { to: '/kitchen', icon: ChefHat, label: 'Kitchen' },
   { to: '/orders', icon: Receipt, label: 'Orders' },
   { to: '/menu', icon: UtensilsCrossed, label: 'Menu' },
-  { to: '/inventory', icon: Package, label: 'Inventory', comingSoon: true },
+  { to: '/inventory', icon: Package, label: 'Inventory' },
   { to: '/reports', icon: BarChart2, label: 'Reports', comingSoon: true },
   { to: '/settings', icon: Settings, label: 'Settings', comingSoon: true },
 ]

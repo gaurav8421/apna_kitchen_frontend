@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
+import { createBrowserRouter, Navigate, Outlet, lazy } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
 import Login from '../pages/auth/Login'
 import Register from '../pages/auth/Register'
@@ -8,6 +8,8 @@ import POSScreen from '../pages/pos/POSScreen'
 import OrderHistory from '../pages/orders/OrderHistory'
 import MenuManager from '../pages/menu/MenuManager'
 import KitchenDisplay from '../pages/kitchen/KitchenDisplay'
+
+const InventoryList = lazy(() => import('../pages/inventory/InventoryList'))
 
 function RequireAuth() {
   const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken))
@@ -38,6 +40,7 @@ const router = createBrowserRouter([
           { path: '/pos', element: <POSScreen /> },
           { path: '/orders', element: <OrderHistory /> },
           { path: '/menu', element: <MenuManager /> },
+          { path: '/inventory', element: <InventoryList /> },
           { path: '/', element: <Navigate to="/dashboard" replace /> },
         ],
       },
