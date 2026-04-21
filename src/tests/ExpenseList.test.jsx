@@ -71,8 +71,8 @@ describe('ExpenseList', () => {
     vi.mocked(useExpenses).mockReturnValueOnce({ isLoading: false, isError: false, data: [mockExpense], refetch: vi.fn() })
     render(<ExpenseList />)
     expect(screen.getByText('Bharat Gas')).toBeInTheDocument()
-    expect(screen.getByText('Utilities')).toBeInTheDocument()
-    expect(screen.getByText('₹1,200.00')).toBeInTheDocument()
+    expect(screen.getAllByText('Utilities').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('₹1,200.00').length).toBeGreaterThanOrEqual(1)
   })
 
   it('shows client-side total of all shown expenses', () => {

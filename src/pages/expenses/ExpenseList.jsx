@@ -92,9 +92,9 @@ export default function ExpenseList() {
         </div>
       )}
       {isError && (
-        <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2 flex items-center gap-3">
-          <p>Could not load expenses</p>
-          <button onClick={() => refetch()} className="underline hover:no-underline font-medium ml-1">
+        <div className="mb-4 flex items-center gap-2 text-sm text-red-600">
+          <span>Could not load expenses ·</span>
+          <button onClick={() => refetch()} className="underline hover:no-underline font-medium">
             Retry
           </button>
         </div>
@@ -123,7 +123,7 @@ export default function ExpenseList() {
           >
             <option value="">All categories</option>
             {categories.map((c) => (
-              <option key={c.id} value={c.id}>{`— ${c.name}`}</option>
+              <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
         </div>
@@ -206,7 +206,7 @@ export default function ExpenseList() {
       </div>
 
       {/* Total */}
-      {expenses.length > 1 && (
+      {expenses.length > 0 && (
         <p className="text-sm text-gray-600 mt-3 text-right">
           Total shown: <span className="font-semibold text-gray-800">{fmtMoney(total)}</span>
         </p>
