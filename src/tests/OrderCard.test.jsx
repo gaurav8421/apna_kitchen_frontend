@@ -111,14 +111,17 @@ describe('OrderCard', () => {
     expect(btn).toBeDisabled()
   })
 
-  it('auto-hides cancelled order after 10 seconds', () => {
-    vi.useFakeTimers()
-    const { container } = wrap(
-      <OrderCard order={{ ...baseOrder, status: 'cancelled' }} onStatusUpdate={vi.fn()} />
-    )
-    expect(container.firstChild).not.toBeNull()
-    act(() => vi.advanceTimersByTime(10_000))
-    expect(container.firstChild).toBeNull()
-    vi.useRealTimers()
+  describe('cancelled auto-hide', () => {
+    beforeEach(() => vi.useFakeTimers())
+    afterEach(() => vi.useRealTimers())
+
+    it('auto-hides cancelled order after 10 seconds', () => {
+      const { container } = wrap(
+        <OrderCard order={{ ...baseOrder, status: 'cancelled' }} onStatusUpdate={vi.fn()} />
+      )
+      expect(container.firstChild).not.toBeNull()
+      act(() => vi.advanceTimersByTime(10_000))
+      expect(container.firstChild).toBeNull()
+    })
   })
 })

@@ -94,6 +94,7 @@ export default function OrderCard({ order, onStatusUpdate }) {
         <button
           onClick={handleAction}
           disabled={isPending}
+          aria-label={isPending ? `${ACTION_LABEL[order.status]} — updating` : ACTION_LABEL[order.status]}
           className={`w-full py-2 rounded-lg text-sm font-medium transition ${ACTION_COLOR[order.status]} disabled:opacity-50`}
         >
           {isPending ? 'Updating…' : ACTION_LABEL[order.status]}
