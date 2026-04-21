@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, ShoppingCart, UtensilsCrossed,
-  Package, Receipt, BarChart2, Settings, LogOut, ChefHat
+  Package, Receipt, BarChart2, Settings, LogOut, ChefHat, Wallet
 } from 'lucide-react'
 import useAuthStore from '../../store/authStore'
 import { useLogout } from '../../api/auth'
@@ -13,6 +13,7 @@ const navItems = [
   { to: '/orders', icon: Receipt, label: 'Orders' },
   { to: '/menu', icon: UtensilsCrossed, label: 'Menu' },
   { to: '/inventory', icon: Package, label: 'Inventory' },
+  { to: '/expenses', icon: Wallet, label: 'Expenses' },
   { to: '/reports', icon: BarChart2, label: 'Reports', comingSoon: true },
   { to: '/settings', icon: Settings, label: 'Settings', comingSoon: true },
 ]

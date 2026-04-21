@@ -10,6 +10,7 @@ import MenuManager from '../pages/menu/MenuManager'
 import KitchenDisplay from '../pages/kitchen/KitchenDisplay'
 
 const InventoryList = lazy(() => import('../pages/inventory/InventoryList'))
+const ExpenseList = lazy(() => import('../pages/expenses/ExpenseList'))
 
 function RequireAuth() {
   const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken))
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
           { path: '/orders', element: <OrderHistory /> },
           { path: '/menu', element: <MenuManager /> },
           { path: '/inventory', element: <InventoryList /> },
+          { path: '/expenses', element: <ExpenseList /> },
           { path: '/', element: <Navigate to="/dashboard" replace /> },
         ],
       },
