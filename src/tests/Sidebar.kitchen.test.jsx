@@ -31,4 +31,14 @@ describe('Sidebar — kitchen role', () => {
     wrap(<Sidebar />)
     expect(screen.queryByText('Dashboard')).not.toBeInTheDocument()
   })
+
+  it('does not show Orders for kitchen role', () => {
+    wrap(<Sidebar />)
+    expect(screen.queryByText('Orders')).not.toBeInTheDocument()
+  })
+
+  it('does not show Menu for kitchen role', () => {
+    wrap(<Sidebar />)
+    expect(screen.queryByText('Menu')).not.toBeInTheDocument()
+  })
 })
