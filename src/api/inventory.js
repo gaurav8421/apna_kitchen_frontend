@@ -4,7 +4,10 @@ import client from './client'
 export function useInventoryItems() {
   return useQuery({
     queryKey: ['inventory'],
-    queryFn: () => client.get('/inventory/').then((r) => r.data),
+    queryFn: () => client.get('/inventory/').then((r) => {
+      const d = r.data
+      return Array.isArray(d) ? d : (d?.results ?? [])
+    }),
   })
 }
 

@@ -8,6 +8,8 @@ import {
   useCreateExpenseCategory,
 } from '../../api/expenses'
 import ExpenseFormModal from '../../components/expenses/ExpenseFormModal'
+import TableFooter, { usePagination } from '../../components/layout/TableFooter'
+import { downloadCsv } from '../../utils/csv'
 
 function fmtMoney(val) {
   const n = Number(val)
@@ -23,7 +25,7 @@ function fmtDate(dateStr) {
 
 export default function ExpenseList() {
   const [filters, setFilters] = useState({ category: '', from: '', to: '' })
-  const [modal, setModal] = useState(null) // null | 'add' | expense-object
+  const [modal, setModal] = useState(null)
   const [toast, setToast] = useState('')
 
   const activeFilters = {}
@@ -33,6 +35,7 @@ export default function ExpenseList() {
 
   const { data: rawExpenses, isLoading, isError, refetch } = useExpenses(activeFilters)
   const expenses = rawExpenses ?? []
+  const pagination = usePagination(expenses.length)
   const { data: rawCategories } = useExpenseCategories()
   const categories = rawCategories ?? []
   const createExpense = useCreateExpense()
@@ -174,11 +177,11 @@ export default function ExpenseList() {
                 </td>
               </tr>
             )}
-            {expenses.map((expense) => (
+            {expenses.slice(pagination.start, pagination.end).map((expense) => (
               <tr key={expense.id} className="border-b last:border-0">
-                <td className="px-4 py-3 text-gray-600">{fmtDate(expense.expense_date)}</td>
-                <td className="px-4 py-3 text-gray-800">{expense.category?.name ?? '—'}</td>
-                <td className="px-4 py-3 text-gray-600">{expense.vendor_name || '—'}</td>
+                <td className="px-4 py-3 text-gray-600">{fmtDate(expense.date)}</td>
+                <td className="px-4 py-3 text-gray-800">{expense.category_name ?? '—'}</td>
+                <td className="px-4 py-3 text-gray-600">{expense.vendor || '—'}</td>
                 <td className="px-4 py-3 text-gray-600">{expense.description || '—'}</td>
                 <td className="px-4 py-3 font-medium text-gray-800">{fmtMoney(expense.amount)}</td>
                 <td className="px-4 py-3">
@@ -203,9 +206,19 @@ export default function ExpenseList() {
             ))}
           </tbody>
         </table>
+        <TableFooter
+          {...pagination}
+          total={expenses.length}
+          onExport={() =>
+            downloadCsv(
+              'expenses.csv',
+              ['Date', 'Category', 'Vendor', 'Description', 'Amount'],
+              expenses.map((e) => [e.date, e.category_name ?? '', e.vendor ?? '', e.description ?? '', e.amount])
+            )
+          }
+        />
       </div>
 
-      {/* Total */}
       {expenses.length > 0 && (
         <p className="text-sm text-gray-600 mt-3 text-right">
           Total shown: <span className="font-semibold text-gray-800">{fmtMoney(total)}</span>

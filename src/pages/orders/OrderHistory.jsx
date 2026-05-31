@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useOrders } from '../../api/orders'
+import TableFooter, { usePagination } from '../../components/layout/TableFooter'
+import { downloadCsv } from '../../utils/csv'
 
 const STATUS_COLORS = {
   pending: 'bg-yellow-100 text-yellow-700',
@@ -19,6 +21,7 @@ const ORDER_TYPE_LABELS = {
 export default function OrderHistory() {
   const [statusFilter, setStatusFilter] = useState('')
   const { data: orders = [], isLoading } = useOrders(statusFilter ? { status: statusFilter } : {})
+  const pagination = usePagination(orders.length)
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
@@ -57,7 +60,7 @@ export default function OrderHistory() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {orders.map((order) => (
+              {orders.slice(pagination.start, pagination.end).map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-medium text-gray-900">{order.order_number}</td>
                   <td className="px-4 py-3 text-gray-600">{ORDER_TYPE_LABELS[order.order_type] ?? order.order_type}</td>
@@ -84,6 +87,25 @@ export default function OrderHistory() {
               ))}
             </tbody>
           </table>
+          <TableFooter
+            {...pagination}
+            total={orders.length}
+            onExport={() =>
+              downloadCsv(
+                'orders.csv',
+                ['Order #', 'Type', 'Table', 'Items', 'Total', 'Status', 'Time'],
+                orders.map((o) => [
+                  o.order_number,
+                  ORDER_TYPE_LABELS[o.order_type] ?? o.order_type,
+                  o.table_number ?? '',
+                  o.items?.length ?? 0,
+                  o.total != null ? Number(o.total).toFixed(2) : '',
+                  o.status,
+                  o.created_at ? new Date(o.created_at).toLocaleString('en-IN') : '',
+                ])
+              )
+            }
+          />
         </div>
       )}
     </div>

@@ -13,8 +13,8 @@ export default function ExpenseFormModal({
   const [form, setForm] = useState({
     amount: '',
     category: '',
-    vendor_name: '',
-    expense_date: today,
+    vendor: '',
+    date: today,
     description: '',
   })
   const [errors, setErrors] = useState({})
@@ -26,9 +26,9 @@ export default function ExpenseFormModal({
     if (expense) {
       setForm({
         amount: expense.amount,
-        category: expense.category?.id ?? '',
-        vendor_name: expense.vendor_name ?? '',
-        expense_date: expense.expense_date,
+        category: typeof expense.category === 'string' ? expense.category : (expense.category?.id ?? ''),
+        vendor: expense.vendor ?? '',
+        date: expense.date,
         description: expense.description ?? '',
       })
     }
@@ -64,7 +64,7 @@ export default function ExpenseFormModal({
     const amt = Number(form.amount)
     if (!form.amount || isNaN(amt) || amt <= 0) e.amount = 'Amount must be > 0'
     if (!form.category) e.category = 'Category is required'
-    if (!form.expense_date) e.expense_date = 'Date is required'
+    if (!form.date) e.date = 'Date is required'
     return e
   }
 
@@ -75,8 +75,8 @@ export default function ExpenseFormModal({
     onSubmit({
       amount: form.amount,
       category: form.category,
-      vendor_name: form.vendor_name || undefined,
-      expense_date: form.expense_date,
+      vendor: form.vendor || undefined,
+      date: form.date,
       description: form.description || undefined,
     })
   }
@@ -135,8 +135,8 @@ export default function ExpenseFormModal({
             <label className="block text-sm text-gray-600 mb-1">Vendor (optional)</label>
             <input
               className="w-full border rounded-lg px-3 py-2 text-sm"
-              value={form.vendor_name}
-              onChange={(e) => setForm((f) => ({ ...f, vendor_name: e.target.value }))}
+              value={form.vendor}
+              onChange={(e) => setForm((f) => ({ ...f, vendor: e.target.value }))}
             />
           </div>
           <div>
@@ -144,10 +144,10 @@ export default function ExpenseFormModal({
             <input
               type="date"
               className="w-full border rounded-lg px-3 py-2 text-sm"
-              value={form.expense_date}
-              onChange={(e) => setForm((f) => ({ ...f, expense_date: e.target.value }))}
+              value={form.date}
+              onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
             />
-            {errors.expense_date && <p className="text-red-500 text-xs mt-1">{errors.expense_date}</p>}
+            {errors.date && <p className="text-red-500 text-xs mt-1">{errors.date}</p>}
           </div>
           <div>
             <label className="block text-sm text-gray-600 mb-1">Description (optional)</label>
@@ -166,7 +166,7 @@ export default function ExpenseFormModal({
               disabled={isSubmitting}
               className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 disabled:opacity-50"
             >
-              {isSubmitting ? 'Saving…' : expense ? 'Save Changes' : 'Add Expense'}
+              {isSubmitting ? 'Saving…' : expense ? 'Save Changes' : 'Save Expense'}
             </button>
           </div>
         </form>

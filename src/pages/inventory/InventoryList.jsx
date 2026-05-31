@@ -8,10 +8,13 @@ import {
 } from '../../api/inventory'
 import InventoryItemModal from '../../components/inventory/InventoryItemModal'
 import StockAdjustModal from '../../components/inventory/StockAdjustModal'
+import TableFooter, { usePagination } from '../../components/layout/TableFooter'
+import { downloadCsv } from '../../utils/csv'
 
 export default function InventoryList() {
   const { data, isLoading, isError, refetch } = useInventoryItems()
   const items = data ?? []
+  const pagination = usePagination(items.length)
   const createItem = useCreateInventoryItem()
   const updateItem = useUpdateInventoryItem()
   const deleteItem = useDeleteInventoryItem()
@@ -105,7 +108,7 @@ export default function InventoryList() {
                 </td>
               </tr>
             )}
-            {items.map((item) => {
+            {items.slice(pagination.start, pagination.end).map((item) => {
               const isLow = Number(item.current_stock) <= Number(item.low_stock_threshold)
               return (
                 <tr
@@ -153,6 +156,17 @@ export default function InventoryList() {
             })}
           </tbody>
         </table>
+        <TableFooter
+          {...pagination}
+          total={items.length}
+          onExport={() =>
+            downloadCsv(
+              'inventory.csv',
+              ['Name', 'Unit', 'Stock', 'Low Stock Threshold', 'Cost/Unit'],
+              items.map((i) => [i.name, i.unit, i.current_stock, i.low_stock_threshold, i.cost_per_unit])
+            )
+          }
+        />
       </div>
 
       {itemModal && (

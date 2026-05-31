@@ -1,4 +1,5 @@
-import { createBrowserRouter, Navigate, Outlet, lazy } from 'react-router-dom'
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
+import { lazy } from 'react'
 import useAuthStore from '../store/authStore'
 import Login from '../pages/auth/Login'
 import Register from '../pages/auth/Register'
@@ -11,6 +12,8 @@ import KitchenDisplay from '../pages/kitchen/KitchenDisplay'
 
 const InventoryList = lazy(() => import('../pages/inventory/InventoryList'))
 const ExpenseList = lazy(() => import('../pages/expenses/ExpenseList'))
+const ReportsPage = lazy(() => import('../pages/reports/ReportsPage'))
+const SettingsPage = lazy(() => import('../pages/settings/SettingsPage'))
 
 function RequireAuth() {
   const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken))
@@ -43,6 +46,8 @@ const router = createBrowserRouter([
           { path: '/menu', element: <MenuManager /> },
           { path: '/inventory', element: <InventoryList /> },
           { path: '/expenses', element: <ExpenseList /> },
+          { path: '/reports', element: <ReportsPage /> },
+          { path: '/settings', element: <SettingsPage /> },
           { path: '/', element: <Navigate to="/dashboard" replace /> },
         ],
       },

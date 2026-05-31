@@ -25,8 +25,8 @@ function wrap(ui) {
 describe('Login page', () => {
   it('renders email and password fields', () => {
     wrap(<Login />)
-    expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument()
-    expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument()
+    expect(screen.getByLabelText('Email')).toBeInTheDocument()
+    expect(screen.getByLabelText('Password')).toBeInTheDocument()
   })
 
   it('shows validation error when submitting empty form', async () => {

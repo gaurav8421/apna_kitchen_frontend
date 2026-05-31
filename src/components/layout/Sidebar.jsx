@@ -14,8 +14,8 @@ const navItems = [
   { to: '/menu', icon: UtensilsCrossed, label: 'Menu' },
   { to: '/inventory', icon: Package, label: 'Inventory' },
   { to: '/expenses', icon: Wallet, label: 'Expenses' },
-  { to: '/reports', icon: BarChart2, label: 'Reports', comingSoon: true },
-  { to: '/settings', icon: Settings, label: 'Settings', comingSoon: true },
+  { to: '/reports', icon: BarChart2, label: 'Reports' },
+  { to: '/settings', icon: Settings, label: 'Settings' },
 ]
 
 const roleNav = {

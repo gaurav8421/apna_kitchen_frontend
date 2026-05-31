@@ -79,8 +79,7 @@ export default function CartPanel({ taxRate = 5, onPay }) {
             </button>
             <button
               onClick={onPay}
-              disabled={orderType === 'dine_in' && !tableNumber.trim()}
-              className="flex-1 py-2.5 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="flex-1 py-2.5 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 transition"
             >
               Pay ₹{tot.toFixed(2)}
             </button>

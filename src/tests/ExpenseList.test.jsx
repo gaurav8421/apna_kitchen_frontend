@@ -26,9 +26,10 @@ const mockExpense = {
   id: 'exp-1',
   amount: '1200.00',
   description: 'Monthly gas',
-  vendor_name: 'Bharat Gas',
-  expense_date: '2026-04-21',
-  category: { id: 'cat-1', name: 'Utilities' },
+  vendor: 'Bharat Gas',
+  date: '2026-04-21',
+  category: 'cat-1',
+  category_name: 'Utilities',
   created_at: '2026-04-21T10:30:00Z',
 }
 
@@ -36,9 +37,10 @@ const mockExpense2 = {
   id: 'exp-2',
   amount: '8000.00',
   description: 'Staff salary',
-  vendor_name: 'Staff',
-  expense_date: '2026-04-20',
-  category: { id: 'cat-2', name: 'Salary' },
+  vendor: 'Staff',
+  date: '2026-04-20',
+  category: 'cat-2',
+  category_name: 'Salary',
   created_at: '2026-04-20T10:00:00Z',
 }
 
